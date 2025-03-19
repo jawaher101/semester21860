@@ -6,8 +6,6 @@ push constant 0
 lt
 if-goto NEGATIVE_X
 
-push local 0
-pop local 0
 goto START_MULTIPLICATION
 
 label NEGATIVE_X
@@ -28,6 +26,14 @@ eq
 if-goto ZERO_CASE
 
 label LOOP
+push local 2
+push constant 0
+gt
+if-goto CONTINUE
+
+goto END
+
+label CONTINUE
 push local 1
 push local 0
 add
@@ -38,16 +44,7 @@ push constant 1
 sub
 pop local 2
 
-push local 2
-push constant 0
-gt
-if-goto LOOP
-
-push local 1
-pop argument 1
-
-push argument 1
-goto END
+goto LOOP
 
 label ZERO_CASE
 push constant 0
@@ -56,5 +53,9 @@ push argument 1
 goto END
 
 label END
+push local 1
+pop argument 1
+push argument 1
+
 label INFINITE_LOOP
 goto INFINITE_LOOP
