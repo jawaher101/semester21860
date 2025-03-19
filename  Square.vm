@@ -1,7 +1,5 @@
-
 push argument 0
 pop local 0
-
 
 push local 0
 push constant 0
@@ -17,9 +15,7 @@ push local 0
 neg
 pop local 0
 
-
 label START_MULTIPLICATION
-
 push constant 0
 pop local 1
 
@@ -32,12 +28,10 @@ eq
 if-goto ZERO_CASE
 
 label LOOP
-
 push local 1
 push local 0
 add
 pop local 1
-
 
 push local 2
 push constant 1
@@ -49,16 +43,11 @@ push constant 0
 gt
 if-goto LOOP
 
-
 push local 1
 pop argument 1
 
-
 push argument 1
-
-
 goto END
-
 
 label ZERO_CASE
 push constant 0
