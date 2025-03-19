@@ -1,0 +1,48 @@
+// push the first argument onto the stack
+push argument 0
+
+// push the same argument again to check if it's negative
+push argument 0
+
+// push constant 0 to compare with argument[0]
+push constant 0
+lt  // check if argument[0] < 0
+
+if-goto HANDLE_NEGATIVE  // jump if argument[0] is negative
+
+// set argument[2] to 0 to indicate a positive number
+push constant 0
+pop argument 2
+
+// store argument[0] into argument[1]
+pop argument 1
+
+// initialize argument[3] to 0
+push constant 0
+pop argument 3
+
+// skip the negative number handling
+goto END_PROCESSING
+
+// label for handling negative numbers
+label HANDLE_NEGATIVE
+
+// set argument[2] to 1 to indicate a negative number
+push constant 1
+pop argument 2
+
+// convert argument[0] to positive and store in argument[1]
+push argument 0
+neg
+pop argument 1
+
+// initialize argument[3] to 0
+push constant 0
+pop argument 3
+
+// label for the end of processing
+label END_PROCESSING
+
+// infinite loop to stop execution
+label INFINITE_LOOP
+goto INFINITE_LOOP

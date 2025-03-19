@@ -1,0 +1,80 @@
+// store input in local[0]
+push argument 0
+pop local 0
+
+// check if x is negative
+push local 0
+push constant 0
+lt
+if-goto NEGATIVE_X
+
+// if x is non-negative, keep it
+push local 0
+pop local 0
+goto START_MULTIPLICATION
+
+// convert x to positive
+label NEGATIVE_X
+push local 0
+neg
+pop local 0
+
+// start multiplication
+label START_MULTIPLICATION
+
+// initialize result to 0
+push constant 0
+pop local 1
+
+// set loop counter to |x|
+push local 0
+pop local 2
+
+// handle x = 0
+push local 0
+push constant 0
+eq
+if-goto ZERO_CASE
+
+// loop: compute x * x using addition
+label LOOP
+
+// add |x| to result
+push local 1
+push local 0
+add
+pop local 1
+
+// decrement counter
+push local 2
+push constant 1
+sub
+pop local 2
+
+// repeat if counter > 0
+push local 2
+push constant 0
+gt
+if-goto LOOP
+
+// store result in argument[1]
+push local 1
+pop argument 1
+
+// leave result on stack
+push argument 1
+
+// skip zero case
+goto END
+
+// special case for x = 0
+label ZERO_CASE
+push constant 0
+pop argument 1
+push argument 1
+goto END
+
+// end program
+label END
+label INFINITE_LOOP
+goto INFINITE_LOOP
