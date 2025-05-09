@@ -1,79 +1,89 @@
-// load the value stored in memory address R0 into register D
+// load the initial value from RAM address 0 (R0) 
 @0
 D=M
 
-// if the value in R0 is less than zero (negative), jump to NEGATIVE label
+// check if the number is negative
+// if the value < 0, the program will jump to the negative label
 @NEGATIVE
 D;JLT
 
-// value is non-negative: load R0 again into D
+// if we reach here, the number is positive or zero
 @0
 D=M
 
-// redundant negative check (included again for safety)
+// double check for negative numbers 
+// we don't miss negative values
 @NEGATIVE
 D;JLT
 
-// since the value is non-negative, store it in R1 (R1 = R0)
+// for positive numbers: simply copy R0's value into R1
+// this is done because positive numbers don't need conversion
 @1
 M=D
 
-// set R2 = 0 to indicate the number is not negative
+// set R2 to 0 to indicate this was a positive number
+// R2 acts as a sign flag (0 = positive, 1 = negative)
 @2
 M=0
 
-// set R3 = 0 to indicate no overflow has occurred
+// set R3 to 0 because there's no possibility of overflow with positive numbers
+// R3 acts as an overflow flag (0 = no overflow, 1 = overflow occurred)
 @3
 M=0
 
-// jump to END label to finish execution
+// skip the negative number handling by jumping to the end of the program
 @END
 0;JMP
 
 (NEGATIVE)
-// we are in the NEGATIVE label: mark that the value was negative
+// we arrive here if the number was negative
+// first, set R2 to 1 to remember that this was a negative number
 @2
 M=1
 
-// check if the value is -32768, which cannot be negated in 16-bit signed integer
+// special case check: is this number -32768?
+// -32768 is special because it's the most negative 16-bit number
+// add 32768 to the number, if result is 0, we found -32768
 @0
 D=M
 @32768
-D=D+A   // D will be 0 if R0 == -32768
+D=D+A
 @OVERFLOW
-D;JEQ   // If so, jump to handle overflow
+D;JEQ
 
-// Otherwise, compute the absolute value by negating the value in R0
+// for all other negative numbers:
+// load the negative number from R0 and negate it to get its absolute value
 @0
 D=M
 D=-D
 
-// store the absolute value in R1
+// store the absolute value result in R1
 @1
 M=D
 
-// set R3 = 0 to indicate no overflow
+// set R3 to 0 because no overflow occurred during negation
 @3
 M=0
 
-// jump to END to finish
+// jump to end
 @END
 0;JMP
 
 (OVERFLOW)
-// overflow handler: the input was -32768, which cannot be negated in 16-bit
+// special handling for -32768
+// copy the original -32768 value to R1 without trying to negate it
 @0
 D=M
-
-// copy the original value into R1 (without negation)
 @1
 M=D
 
-// set R3 = 1 to indicate an overflow has occurred
+// set R3 to 1 to indicate that an overflow condition occurred
+// this happens because -32768 cannot be represented as a positive number in 16 bits
 @3
 M=1
 
 (END)
-// final label: halt execution with an infinite loop
+// create an infinite loop 
+// this prevents execution 
 @END
 0;JMP
